@@ -93,6 +93,38 @@ mushroom_fire_pack = [
     mushroom_fire6, mushroom_fire7
 ]
 
+"""Mushroom death."""
+mushroom_death0 = pygame.image.load("Images/Mushoom_death/mushroom_death_0.png")
+mushroom_death1 = pygame.image.load("Images/Mushoom_death/mushroom_death_1.png")
+mushroom_death2 = pygame.image.load("Images/Mushoom_death/mushroom_death_2.png")
+mushroom_death3 = pygame.image.load("Images/Mushoom_death/mushroom_death_3.png")
+mushroom_death4 = pygame.image.load("Images/Mushoom_death/mushroom_death_4.png")
+mushroom_death5 = pygame.image.load("Images/Mushoom_death/mushroom_death_5.png")
+
+mushroom_death_pack = [
+    mushroom_death0, mushroom_death1, mushroom_death2, mushroom_death3, mushroom_death4, mushroom_death5
+]
+
+"""Mushroom dodge right."""
+mushroom_dodge_right0 = pygame.image.load("Images/Mushroom_dodge_right/Mushroom_dodge_right0.png")
+mushroom_dodge_right1 = pygame.image.load("Images/Mushroom_dodge_right/Mushroom_dodge_right1.png")
+mushroom_dodge_right2 = pygame.image.load("Images/Mushroom_dodge_right/Mushroom_dodge_right2.png")
+mushroom_dodge_right3 = pygame.image.load("Images/Mushroom_dodge_right/Mushroom_dodge_right3.png")
+mushroom_dodge_right4 = pygame.image.load("Images/Mushroom_dodge_right/Mushroom_dodge_right4.png")
+
+mushroom_dodge_right_pack = [mushroom_dodge_right0, mushroom_dodge_right1, mushroom_dodge_right2, mushroom_dodge_right3,
+                             mushroom_dodge_right4]
+
+"""Mushroom dodge left."""
+mushroom_dodge_left0 = pygame.image.load("Images/Mushroom_dodge_left/Mushroom_dodge_left0.png")
+mushroom_dodge_left1 = pygame.image.load("Images/Mushroom_dodge_left/Mushroom_dodge_left1.png")
+mushroom_dodge_left2 = pygame.image.load("Images/Mushroom_dodge_left/Mushroom_dodge_left2.png")
+mushroom_dodge_left3 = pygame.image.load("Images/Mushroom_dodge_left/Mushroom_dodge_left3.png")
+mushroom_dodge_left4 = pygame.image.load("Images/Mushroom_dodge_left/Mushroom_dodge_left4.png")
+
+mushroom_dodge_left_pack = [mushroom_dodge_left0, mushroom_dodge_left1, mushroom_dodge_left2, mushroom_dodge_left3,
+                            mushroom_dodge_left4]
+
 """Villager."""
 villager_stop = pygame.image.load("Images/Villager_stop/villager_stop.png")
 

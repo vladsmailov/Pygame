@@ -1,5 +1,5 @@
 import random
-import pygame
+import pygame, datetime
 from models import (
     all_in_one,
     forrest_background, mushroom_right_pack,
@@ -8,16 +8,19 @@ from models import (
     villager_takes_damage_pack, villager_dead_pack, villager_idle_left_pack,
     villager_takes_damage_left_pack, villager_dead_left_pack, villager_run_right_pack,
     villager_run_left_pack, villager_attack_right_pack, villager_attack_left_pack,
-    villager_attack_right2_pack, villager_attack_left2_pack,
+    villager_attack_right2_pack, villager_attack_left2_pack, mushroom_death_pack,
+    mushroom_dodge_right_pack, mushroom_dodge_left_pack
 )
 
 
 class Game:
     """Configuration class for game object."""
+    pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((928, 793))
     enemy_counter = 0
     running = True
+    game_font = pygame.font.Font('Fonts/Sixtyfour.ttf', 40)
 
     def set_tick(self, quantity):
         """Method for definition of tick (delay) in game process."""
@@ -32,6 +35,10 @@ class Game:
     def quit():
         """Game session ending."""
         return pygame.quit()
+
+    def show_players_hp(self, hp):
+        players_hp = self.game_font.render(hp, True, 'Black')
+        self.screen.blit(players_hp, (20, 20))
 
 
 class Background:
@@ -51,6 +58,9 @@ class Player:
     attack = False
     move = False
     launch = False
+    take_damage = False
+    dead = False
+    dodge = False
     x_coordinate = 400
     y_coordinate = 690
     current_x = 0
@@ -58,6 +68,13 @@ class Player:
     player_animation_count = 0
     height_count = 0
     attack_animation_count = 0
+    take_damage_count = 0
+    death_animation_count = 0
+    dodge_animation_count = 0
+    dodge_up_animation_count = 4
+    player_hp = 100
+    dodge_cooldown = datetime.timedelta(seconds=2)
+    dodge_last_use = datetime.datetime.now()
 
     def idle_player(self, background):
         if self.right_direction:
@@ -74,15 +91,19 @@ class Player:
         if button == "left":
             self.right_direction = False
             self.move = True
-            background.blit(mushroom_left_pack[self.player_animation_count], (self.x_coordinate, self.y_coordinate - self.current_y))
+            background.blit(mushroom_left_pack[self.player_animation_count],
+                            (self.x_coordinate, self.y_coordinate - self.current_y)
+                            )
             self.player_animation_count += 1
-            self.current_x += 8
+            self.current_x += 11
         elif button == "right":
             self.right_direction = True
             self.move = True
-            background.blit(mushroom_right_pack[self.player_animation_count], (self.x_coordinate, self.y_coordinate - self.current_y))
+            background.blit(mushroom_right_pack[self.player_animation_count],
+                            (self.x_coordinate, self.y_coordinate - self.current_y)
+                            )
             self.player_animation_count += 1
-            self.current_x -= 8
+            self.current_x -= 11
         return
 
     def jump_player(self, background):
@@ -93,7 +114,10 @@ class Player:
         if self.height_count <= 7:
             if self.attack:
                 self.height_count += 1
-                self.current_y += 15
+                self.current_y += 18
+            elif self.take_damage:
+                self.height_count += 1
+                self.current_y += 18
             else:
                 self.height_count += 1
                 self.current_y += 15
@@ -101,10 +125,13 @@ class Player:
         elif 7 < self.height_count <= 14:
             if self.attack:
                 self.height_count += 1
-                self.current_y -= 15
+                self.current_y -= 18
+            elif self.take_damage:
+                self.height_count += 1
+                self.current_y -= 18
             else:
                 self.height_count += 1
-                self.current_y -= 15
+                self.current_y -= 18
                 background.blit(direction[0], (400, 690 - self.current_y))
         else:
             self.jump = False
@@ -126,6 +153,55 @@ class Player:
             self.attack_animation_count = 0
             self.attack = False
             self.launch = True
+
+    def take_damage_player(self, background):
+        if self.right_direction:
+            direction = mushroom_attack_right_pack
+        else:
+            direction = mushroom_attack_left_pack
+        if self.take_damage_count < 7:
+            background.blit(direction[self.take_damage_count], (388, 675 - self.current_y))
+            self.take_damage_count += 1
+        else:
+            self.take_damage_count = 0
+            self.take_damage = False
+            self.player_hp -= 10
+
+    def death(self, background):
+        if self.death_animation_count < 5:
+            background.blit(mushroom_death_pack[self.death_animation_count],
+                            (388, 675)
+                            )
+            self.death_animation_count += 1
+        else:
+            background.blit(mushroom_death_pack[self.death_animation_count],
+                            (388, 675)
+                            )
+            self.dead = True
+
+    def dodge_player(self, background):
+        if self.right_direction:
+            direction = mushroom_dodge_right_pack
+            step = -150
+        else:
+            direction = mushroom_dodge_left_pack
+            step = 150
+        if self.dodge_animation_count <= 3:
+            background.blit(direction[self.dodge_animation_count], (self.x_coordinate, self.y_coordinate))
+            self.dodge_animation_count += 1
+        elif self.dodge_animation_count == 4 and self.dodge_up_animation_count == 4:
+            self.dodge_last_use = datetime.datetime.now()
+            background.blit(direction[self.dodge_animation_count], (self.x_coordinate, self.y_coordinate))
+            self.dodge_up_animation_count -= 1
+            self.current_x += step
+        elif self.dodge_animation_count == 4 and self.dodge_up_animation_count >= 1:
+            background.blit(direction[self.dodge_up_animation_count], (self.x_coordinate, self.y_coordinate))
+            self.dodge_up_animation_count -= 1
+        else:
+            background.blit(direction[self.dodge_up_animation_count], (self.x_coordinate, self.y_coordinate))
+            self.dodge_up_animation_count = 4
+            self.dodge_animation_count = 0
+            self.dodge = False
 
 
 class Fireball:
@@ -238,7 +314,7 @@ class Enemy:
             return
 
     def enemy_run(self, background, player_current_x, player_x_coordinate, player_current_y, player_y_coordinate):
-        if player_x_coordinate - player_current_x >= self.x_coordinate + 90:
+        if player_x_coordinate - player_current_x >= self.x_coordinate + self.enemy_sprite_right_border:
             self.right_direction = True
         elif player_x_coordinate - player_current_x <= self.x_coordinate:
             self.right_direction = False
@@ -307,61 +383,82 @@ class Enemy:
         elif player_x_coordinate - player_current_x <= self.x_coordinate:
             self.right_direction = False
         self.current_x = player_current_x
-        if (abs(player_current_x + self.x_coordinate - player_x_coordinate) <= 300 and
+        if (abs(player_current_x + self.x_coordinate - player_x_coordinate) <= 200 and
             not self.right_direction and
             player_y_coordinate - player_current_y >= 615) or \
-                (abs(player_current_x + self.x_coordinate - player_x_coordinate) <= 300 and
+                (abs(player_current_x + self.x_coordinate - player_x_coordinate) <= 200 and
                  self.right_direction and
                  player_y_coordinate - player_current_y >= 615):
             self.under_attack = True
         else:
             pass
 
+
 if __name__ == '__main__':
     player = Player()
     game = Game()
     fireball = None
-    pygame.init()
     background = Background(game.screen)
     running = True
     enemy = None
     while game.running:
         game.set_tick(quantity=15)
+        game.show_players_hp(str(player.player_hp))
         game.game_update()
         keys = pygame.key.get_pressed()
         background.show(player.current_x)
         if player.x_coordinate in range(928) and game.enemy_counter == 0:
             game.enemy_counter += 1
-            enemy = Enemy(30, 0, random.randint(500, 928), 590)
+            enemy = Enemy(100, 0, random.randint(500, 928), 590)
             enemy.current_x = player.current_x
             enemy.idle_enemy(background.screen, player.current_x)
         if enemy and not enemy.under_attack and not enemy.dead and not enemy.run and not enemy.attack:
             enemy.idle_enemy(background.screen, player.current_x)
-            enemy.check_opponent(background.screen, player.current_x, player.x_coordinate, player.current_y, player.y_coordinate)
+            enemy.check_opponent(player.current_x, player.x_coordinate, player.current_y, player.y_coordinate)
         if enemy.attack and not enemy.dead and not enemy.take_hit:
             enemy.enemy_attack(background.screen, player.current_x)
+            if enemy.x_coordinate - (player.x_coordinate - player.current_x) <= 10:
+                player.take_damage = True
+        if player.take_damage and not player.dead:
+            player.take_damage_player(background.screen)
+            if player.player_hp == 0:
+                player.death(background.screen)
+        if player.dead:
+            player.death(background.screen)
+            enemy.attack = False
+            enemy.under_attack = False
         if enemy and enemy.under_attack and not enemy.attack and not enemy.take_hit:
             enemy.run = True
-            enemy.enemy_run(background.screen, player.current_x, player.x_coordinate, player.current_y, player.y_coordinate)
+            enemy.enemy_run(
+                background.screen, player.current_x, player.x_coordinate, player.current_y, player.y_coordinate
+            )
         if enemy.dead:
             enemy.death(background.screen, player.current_x)
         if not player.jump:
             if keys[pygame.K_UP]:
                 player.jump = True
                 player.idle_player(background.screen)
-        elif player.jump:
+        elif player.jump and not player.dead:
             player.jump_player(background.screen)
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] and not player.take_damage and not player.dead:
             player.move_player("right", background.screen)
-        elif keys[pygame.K_LEFT]:
+        elif keys[pygame.K_LEFT] and not player.take_damage and not player.dead and player.current_x < 0:
             player.move_player("left", background.screen)
+        elif keys[pygame.K_DOWN] and not player.take_damage and not player.dead:
+            if player.current_x > -100 and not player.right_direction or\
+                    (datetime.datetime.now() - player.dodge_last_use) <= player.dodge_cooldown:
+                player.dodge = False
+            else:
+                player.dodge = True
         else:
             player.move = False
+        if player.dodge:
+            player.dodge_player(background.screen)
         if not player.attack:
             if keys[pygame.K_SPACE]:
                 player.attack = True
                 player.idle_player(background.screen)
-        elif player.attack:
+        elif player.attack and not player.take_damage and not player.dead and not player.dodge:
             player.attack_player(background.screen)
             if player.launch:
                 fireball = Fireball(player.current_x, player.current_y, player.right_direction)
@@ -377,7 +474,8 @@ if __name__ == '__main__':
                 enemy.take_hit = True
         if enemy.under_attack and not enemy.dead and enemy.take_hit:
             enemy.take_damage(background.screen)
-        if not player.move and not player.attack and not player.jump:
+        if not player.move and not player.attack and not player.jump and not player.take_damage and not player.dead \
+                and not player.dodge:
             player.idle_player(background.screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
