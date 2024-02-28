@@ -19,6 +19,7 @@ class Game:
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((928, 793))
     enemy_counter = 0
+    dead_enemy_counter = 0
     running = True
     game_font = pygame.font.Font('Fonts/Sixtyfour.ttf', 40)
 
@@ -39,6 +40,17 @@ class Game:
     def show_players_hp(self, hp):
         players_hp = self.game_font.render(hp, True, 'Black')
         self.screen.blit(players_hp, (20, 20))
+
+    def check_players_area(self, player_current_x):
+        if player_current_x in range(-928) and self.enemy_counter == 0 and self.dead_enemy_counter == 0:
+            return 1
+
+    def first_location_enemy(self, background ,player_current_x):
+        self.enemy_counter += 1
+        enemy = Enemy(100, 0, random.randint(500, 928), 590)
+        enemy.current_x = player_current_x
+        enemy.idle_enemy(background, player.current_x)
+        return enemy
 
 
 class Background:
@@ -61,6 +73,7 @@ class Player:
     take_damage = False
     dead = False
     dodge = False
+    blocked = False
     x_coordinate = 400
     y_coordinate = 690
     current_x = 0
@@ -75,6 +88,8 @@ class Player:
     player_hp = 100
     dodge_cooldown = datetime.timedelta(seconds=2)
     dodge_last_use = datetime.datetime.now()
+    dodge_underground_time = datetime.timedelta(seconds=2)
+    dodge_underground_start_time = datetime.datetime.now()
 
     def idle_player(self, background):
         if self.right_direction:
@@ -182,26 +197,33 @@ class Player:
     def dodge_player(self, background):
         if self.right_direction:
             direction = mushroom_dodge_right_pack
-            step = -150
+            step = -50
         else:
             direction = mushroom_dodge_left_pack
-            step = 150
+            step = 50
         if self.dodge_animation_count <= 3:
             background.blit(direction[self.dodge_animation_count], (self.x_coordinate, self.y_coordinate))
             self.dodge_animation_count += 1
-        elif self.dodge_animation_count == 4 and self.dodge_up_animation_count == 4:
-            self.dodge_last_use = datetime.datetime.now()
             background.blit(direction[self.dodge_animation_count], (self.x_coordinate, self.y_coordinate))
-            self.dodge_up_animation_count -= 1
-            self.current_x += step
-        elif self.dodge_animation_count == 4 and self.dodge_up_animation_count >= 1:
-            background.blit(direction[self.dodge_up_animation_count], (self.x_coordinate, self.y_coordinate))
-            self.dodge_up_animation_count -= 1
-        else:
-            background.blit(direction[self.dodge_up_animation_count], (self.x_coordinate, self.y_coordinate))
-            self.dodge_up_animation_count = 4
-            self.dodge_animation_count = 0
-            self.dodge = False
+            self.dodge_underground_start_time = datetime.datetime.now()
+        if datetime.datetime.now() - self.dodge_underground_start_time >= self.dodge_underground_time:
+            if self.dodge_animation_count == 4 and self.dodge_up_animation_count == 4:
+                self.current_x += step
+                background.blit(direction[self.dodge_up_animation_count],
+                                (self.x_coordinate, self.y_coordinate))
+                self.dodge_up_animation_count -= 1
+            elif self.dodge_animation_count == 4 and self.dodge_up_animation_count >= 1:
+                self.current_x += step
+                background.blit(direction[self.dodge_up_animation_count],
+                                (self.x_coordinate, self.y_coordinate))
+                self.dodge_up_animation_count -= 1
+            else:
+                background.blit(direction[self.dodge_up_animation_count],
+                                (self.x_coordinate, self.y_coordinate))
+                self.dodge_up_animation_count = 4
+                self.dodge_animation_count = 0
+                self.dodge = False
+                self.dodge_last_use = datetime.datetime.now()
 
 
 class Fireball:
@@ -383,7 +405,7 @@ class Enemy:
         elif player_x_coordinate - player_current_x <= self.x_coordinate:
             self.right_direction = False
         self.current_x = player_current_x
-        if (abs(player_current_x + self.x_coordinate - player_x_coordinate) <= 200 and
+        if (abs(player_current_x + self.x_coordinate - player_x_coordinate) <= 300 and
             not self.right_direction and
             player_y_coordinate - player_current_y >= 615) or \
                 (abs(player_current_x + self.x_coordinate - player_x_coordinate) <= 200 and
@@ -407,18 +429,29 @@ if __name__ == '__main__':
         game.game_update()
         keys = pygame.key.get_pressed()
         background.show(player.current_x)
+        # if game.check_players_area(player.current_x) == 1:
+        #     enemy = game.first_location_enemy(background.screen, player.current_x)
         if player.x_coordinate in range(928) and game.enemy_counter == 0:
             game.enemy_counter += 1
             enemy = Enemy(100, 0, random.randint(500, 928), 590)
             enemy.current_x = player.current_x
             enemy.idle_enemy(background.screen, player.current_x)
+        if player.current_x <= -1000 and not enemy.dead:
+            if player.right_direction:
+                player.blocked = True
+            else:
+                player.blocked = False
+        else:
+            player.blocked = False
         if enemy and not enemy.under_attack and not enemy.dead and not enemy.run and not enemy.attack:
             enemy.idle_enemy(background.screen, player.current_x)
             enemy.check_opponent(player.current_x, player.x_coordinate, player.current_y, player.y_coordinate)
         if enemy.attack and not enemy.dead and not enemy.take_hit:
             enemy.enemy_attack(background.screen, player.current_x)
-            if enemy.x_coordinate - (player.x_coordinate - player.current_x) <= 10:
+            if enemy.x_coordinate - (player.x_coordinate - player.current_x) <= 10 and not player.dodge:
                 player.take_damage = True
+        if player.dodge and not player.blocked:
+            player.dodge_player(background.screen)
         if player.take_damage and not player.dead:
             player.take_damage_player(background.screen)
             if player.player_hp == 0:
@@ -435,27 +468,26 @@ if __name__ == '__main__':
         if enemy.dead:
             enemy.death(background.screen, player.current_x)
         if not player.jump:
-            if keys[pygame.K_UP]:
+            if keys[pygame.K_UP] and not player.dodge:
                 player.jump = True
                 player.idle_player(background.screen)
-        elif player.jump and not player.dead:
+        elif player.jump and not player.dead :
             player.jump_player(background.screen)
-        if keys[pygame.K_RIGHT] and not player.take_damage and not player.dead:
+        if keys[pygame.K_RIGHT] and not player.take_damage and not player.dead and not player.dodge and not player.blocked:
             player.move_player("right", background.screen)
-        elif keys[pygame.K_LEFT] and not player.take_damage and not player.dead and player.current_x < 0:
+        elif keys[pygame.K_LEFT] and not player.take_damage and not player.dead and not player.dodge and player.current_x < 0:
             player.move_player("left", background.screen)
         elif keys[pygame.K_DOWN] and not player.take_damage and not player.dead:
             if player.current_x > -100 and not player.right_direction or\
                     (datetime.datetime.now() - player.dodge_last_use) <= player.dodge_cooldown:
-                player.dodge = False
+                player.idle_player(background.screen)
             else:
                 player.dodge = True
+                player.dodge_player(background.screen)
         else:
             player.move = False
-        if player.dodge:
-            player.dodge_player(background.screen)
         if not player.attack:
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_SPACE] and not player.dodge:
                 player.attack = True
                 player.idle_player(background.screen)
         elif player.attack and not player.take_damage and not player.dead and not player.dodge:
