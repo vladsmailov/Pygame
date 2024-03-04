@@ -20,8 +20,8 @@ class Enemy:
     death_animation_count = 0
     run_animation_count = 0
     attack_animation_count = 0
-    enemy_sprite_left_border = 43
-    enemy_sprite_right_border = 93
+    enemy_sprite_left_border = 40
+    enemy_sprite_right_border = 95
 
     def __init__(self, hp, power, x_coordinate, y_coordinate, mp=0):
         self.hp = hp

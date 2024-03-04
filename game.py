@@ -13,6 +13,7 @@ class Game:
     players_area = 1
     running = True
     game_font = pygame.font.Font('Fonts/Sixtyfour.ttf', 40)
+    enemies = []
 
     def set_tick(self, quantity):
         """Method for definition of tick (delay) in game process."""
@@ -35,12 +36,13 @@ class Game:
     def check_players_area(self, player_current_x):
         if player_current_x >= -1000:
             self.players_area = 1
-        elif -1000 <= player_current_x <= -2000:
+        elif -1000 >= player_current_x >= -2000:
             self.players_area = 2
 
-    def first_location_enemy(self, background, player_current_x):
+    def generate_enemy(self, background, player_current_x, enemies_x, enemies_y):
         self.enemy_counter += 1
-        enemy = Enemy(100, 0, random.randint(500, 928), 590)
+        enemy = Enemy(10, 0, enemies_x, enemies_y)
+        self.enemies.append(enemy)
         enemy.current_x = player_current_x
         enemy.idle_enemy(background, player_current_x)
         return enemy

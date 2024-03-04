@@ -137,10 +137,10 @@ class Player:
     def dodge_player(self, background):
         if self.right_direction:
             direction = mushroom_dodge_right_pack
-            step = -50
+            step = -65
         else:
             direction = mushroom_dodge_left_pack
-            step = 50
+            step = 65
         if self.dodge_animation_count <= 3:
             background.blit(direction[self.dodge_animation_count], (self.x_coordinate, self.y_coordinate))
             self.dodge_animation_count += 1

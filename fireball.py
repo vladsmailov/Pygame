@@ -1,4 +1,5 @@
 from models import mushroom_fire_pack
+from enemy import Enemy
 
 
 class Fireball:
@@ -20,9 +21,9 @@ class Fireball:
             background.blit(mushroom_fire_pack[self.fire_animation_count], (400 + self.fireball_x, 690 - self.fire_y))
             self.fire_animation_count += 1
             if self.right_direction:
-                self.fireball_x += 50
+                self.fireball_x += 35
             else:
-                self.fireball_x -= 50
+                self.fireball_x -= 35
             return
         else:
             self.fireball_x = 0
@@ -30,3 +31,11 @@ class Fireball:
             self.fire_animation_count = 0
             self.fireball_animation = False
             return
+
+    def check_hit(self, enemy: Enemy):
+        if (self.fireball_current_x - enemy.current_x) in range(
+                enemy.x_coordinate + enemy.enemy_sprite_left_border,
+                enemy.x_coordinate + enemy.enemy_sprite_right_border
+        ) and not enemy.dead:
+            return True
+        return False
