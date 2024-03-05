@@ -275,3 +275,127 @@ villager_attack_left2_pack = [
     villager_attack_left_1_0, villager_attack_left_1_1,
     villager_attack_left_1_2, villager_attack_left_1_3
                                ]
+
+"""Knight idle right."""
+knight_idle_right0 = pygame.image.load("Images/Knight_idle_right/knight_idle_right0.png")
+knight_idle_right1 = pygame.image.load("Images/Knight_idle_right/knight_idle_right1.png")
+knight_idle_right2 = pygame.image.load("Images/Knight_idle_right/knight_idle_right2.png")
+knight_idle_right3 = pygame.image.load("Images/Knight_idle_right/knight_idle_right3.png")
+
+knight_idle_right_pack = [knight_idle_right0, knight_idle_right1, knight_idle_right2, knight_idle_right3]
+
+"""Knight idle left."""
+knight_idle_left0 = pygame.image.load("Images/Knight_idle_left/knight_idle_left0.png")
+knight_idle_left1 = pygame.image.load("Images/Knight_idle_left/knight_idle_left1.png")
+knight_idle_left2 = pygame.image.load("Images/Knight_idle_left/knight_idle_left2.png")
+knight_idle_left3 = pygame.image.load("Images/Knight_idle_left/knight_idle_left3.png")
+
+knight_idle_left_pack = [knight_idle_left0, knight_idle_left1, knight_idle_left2, knight_idle_left3]
+
+"""Knight run right."""
+knight_run_right0 = pygame.image.load("Images/Knight_run_right/knight_run_right0.png")
+knight_run_right1 = pygame.image.load("Images/Knight_run_right/knight_run_right1.png")
+knight_run_right2 = pygame.image.load("Images/Knight_run_right/knight_run_right2.png")
+knight_run_right3 = pygame.image.load("Images/Knight_run_right/knight_run_right3.png")
+knight_run_right4 = pygame.image.load("Images/Knight_run_right/knight_run_right4.png")
+knight_run_right5 = pygame.image.load("Images/Knight_run_right/knight_run_right5.png")
+knight_run_right6 = pygame.image.load("Images/Knight_run_right/knight_run_right6.png")
+knight_run_right7 = pygame.image.load("Images/Knight_run_right/knight_run_right7.png")
+
+knight_run_right_pack = [knight_run_right0, knight_run_right1, knight_run_right2, knight_run_right3, knight_run_right4,
+                         knight_run_right5, knight_run_right6, knight_run_right7]
+
+"""Knight run left."""
+knight_run_left0 = pygame.image.load("Images/Knight_run_left/knight_run_left0.png")
+knight_run_left1 = pygame.image.load("Images/Knight_run_left/knight_run_left1.png")
+knight_run_left2 = pygame.image.load("Images/Knight_run_left/knight_run_left2.png")
+knight_run_left3 = pygame.image.load("Images/Knight_run_left/knight_run_left3.png")
+knight_run_left4 = pygame.image.load("Images/Knight_run_left/knight_run_left4.png")
+knight_run_left5 = pygame.image.load("Images/Knight_run_left/knight_run_left5.png")
+knight_run_left6 = pygame.image.load("Images/Knight_run_left/knight_run_left6.png")
+knight_run_left7 = pygame.image.load("Images/Knight_run_left/knight_run_left7.png")
+
+knight_run_left_pack = [knight_run_left0, knight_run_left1, knight_run_left2, knight_run_left3, knight_run_left4,
+                        knight_run_left5, knight_run_left6, knight_run_left7]
+
+"""Knight attack right."""
+knight_attack_right0 = pygame.image.load("Images/Knight_attack_right/knight_attack_right0.png")
+knight_attack_right1 = pygame.image.load("Images/Knight_attack_right/knight_attack_right1.png")
+knight_attack_right2 = pygame.image.load("Images/Knight_attack_right/knight_attack_right2.png")
+knight_attack_right3 = pygame.image.load("Images/Knight_attack_right/knight_attack_right3.png")
+
+knight_attack_right_pack = [knight_attack_right0, knight_attack_right1, knight_attack_right2, knight_attack_right3]
+
+"""Knight attack left."""
+knight_attack_left0 = pygame.image.load("Images/Knight_attack_left/knight_attack_left0.png")
+knight_attack_left1 = pygame.image.load("Images/Knight_attack_left/knight_attack_left1.png")
+knight_attack_left2 = pygame.image.load("Images/Knight_attack_left/knight_attack_left2.png")
+knight_attack_left3 = pygame.image.load("Images/Knight_attack_left/knight_attack_left3.png")
+
+knight_attack_left_pack = [knight_attack_left0, knight_attack_left1, knight_attack_left2, knight_attack_left3]
+
+"""Knight roll right."""
+knight_roll_right0 = pygame.image.load("Images/Knight_roll_right/knight_roll_right0.png")
+knight_roll_right1 = pygame.image.load("Images/Knight_roll_right/knight_roll_right1.png")
+knight_roll_right2 = pygame.image.load("Images/Knight_roll_right/knight_roll_right2.png")
+knight_roll_right3 = pygame.image.load("Images/Knight_roll_right/knight_roll_right3.png")
+
+knight_roll_right_pack = [knight_roll_right0, knight_roll_right1, knight_roll_right2, knight_roll_right3]
+
+"""Knight roll left."""
+knight_roll_left0 = pygame.image.load("Images/Knight_roll_left/knight_roll_left0.png")
+knight_roll_left1 = pygame.image.load("Images/Knight_roll_left/knight_roll_left1.png")
+knight_roll_left2 = pygame.image.load("Images/Knight_roll_left/knight_roll_left2.png")
+knight_roll_left3 = pygame.image.load("Images/Knight_roll_left/knight_roll_left3.png")
+
+knight_roll_left_pack = [knight_roll_left0, knight_roll_left1, knight_roll_left2, knight_roll_left3]
+
+"""Knight takes damage right."""
+knight_takes_damage_right0 = pygame.image.load("Images/Knight_takes_damage_right/knight_takes_damage_right0.png")
+knight_takes_damage_right1 = pygame.image.load("Images/Knight_takes_damage_right/knight_takes_damage_right1.png")
+knight_takes_damage_right2 = pygame.image.load("Images/Knight_takes_damage_right/knight_takes_damage_right2.png")
+knight_takes_damage_right3 = pygame.image.load("Images/Knight_takes_damage_right/knight_takes_damage_right3.png")
+
+knight_takes_damage_right_pack = [
+    knight_takes_damage_right0, knight_takes_damage_right1, knight_takes_damage_right2, knight_takes_damage_right3
+]
+
+"""Knight takes damage left."""
+knight_takes_damage_left0 = pygame.image.load("Images/Knight_takes_damage_left/knight_takes_damage_left0.png")
+knight_takes_damage_left1 = pygame.image.load("Images/Knight_takes_damage_left/knight_takes_damage_left1.png")
+knight_takes_damage_left2 = pygame.image.load("Images/Knight_takes_damage_left/knight_takes_damage_left2.png")
+knight_takes_damage_left3 = pygame.image.load("Images/Knight_takes_damage_left/knight_takes_damage_left3.png")
+
+knight_takes_damage_left_pack = [
+    knight_takes_damage_left0, knight_takes_damage_left1, knight_takes_damage_left2, knight_takes_damage_left3
+]
+
+"""Knight death right."""
+knight_death_right0 = pygame.image.load("Images/Knight_death_right/knight_death_right0.png")
+knight_death_right1 = pygame.image.load("Images/Knight_death_right/knight_death_right1.png")
+knight_death_right2 = pygame.image.load("Images/Knight_death_right/knight_death_right2.png")
+knight_death_right3 = pygame.image.load("Images/Knight_death_right/knight_death_right3.png")
+knight_death_right4 = pygame.image.load("Images/Knight_death_right/knight_death_right4.png")
+knight_death_right5 = pygame.image.load("Images/Knight_death_right/knight_death_right5.png")
+knight_death_right6 = pygame.image.load("Images/Knight_death_right/knight_death_right6.png")
+knight_death_right7 = pygame.image.load("Images/Knight_death_right/knight_death_right7.png")
+knight_death_right8 = pygame.image.load("Images/Knight_death_right/knight_death_right8.png")
+
+knight_death_right_pack = [knight_death_right0, knight_death_right1, knight_death_right2, knight_death_right3,
+                           knight_death_right4, knight_death_right5, knight_death_right6, knight_death_right7,
+                           knight_death_right8]
+
+"""Knight death left."""
+knight_death_left0 = pygame.image.load("Images/Knight_death_left/knight_death_left0.png")
+knight_death_left1 = pygame.image.load("Images/Knight_death_left/knight_death_left1.png")
+knight_death_left2 = pygame.image.load("Images/Knight_death_left/knight_death_left2.png")
+knight_death_left3 = pygame.image.load("Images/Knight_death_left/knight_death_left3.png")
+knight_death_left4 = pygame.image.load("Images/Knight_death_left/knight_death_left4.png")
+knight_death_left5 = pygame.image.load("Images/Knight_death_left/knight_death_left5.png")
+knight_death_left6 = pygame.image.load("Images/Knight_death_left/knight_death_left6.png")
+knight_death_left7 = pygame.image.load("Images/Knight_death_left/knight_death_left7.png")
+knight_death_left8 = pygame.image.load("Images/Knight_death_left/knight_death_left8.png")
+
+knight_death_left_pack = [knight_death_left0, knight_death_left1, knight_death_left2, knight_death_left3,
+                          knight_death_left4, knight_death_left5, knight_death_left6, knight_death_left7,
+                          knight_death_left8]

@@ -1,6 +1,8 @@
 import pygame
-import random
-from enemy import Enemy
+from enemy import Enemy, Knight
+
+CREEP_AREA = [1, 2]
+BOSS_AREAS = [3]
 
 
 class Game:
@@ -36,12 +38,17 @@ class Game:
     def check_players_area(self, player_current_x):
         if player_current_x >= -1000:
             self.players_area = 1
-        elif -1000 >= player_current_x >= -2000:
+        elif -1001 >= player_current_x >= -2000:
             self.players_area = 2
+        elif -2001 >= player_current_x >= -3000:
+            self.players_area = 3
 
     def generate_enemy(self, background, player_current_x, enemies_x, enemies_y):
         self.enemy_counter += 1
-        enemy = Enemy(10, 0, enemies_x, enemies_y)
+        if self.players_area in CREEP_AREA:
+            enemy = Enemy(10, 0, enemies_x, enemies_y)
+        else:
+            enemy = Knight(1, 0, enemies_x, enemies_y)
         self.enemies.append(enemy)
         enemy.current_x = player_current_x
         enemy.idle_enemy(background, player_current_x)

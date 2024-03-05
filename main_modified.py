@@ -5,6 +5,8 @@ from game import Game
 from player import Player
 from fireball import Fireball
 from background import Background
+from enemy import Knight, Enemy
+from randomizer import Actions
 
 if __name__ == '__main__':
     player = Player()
@@ -13,6 +15,7 @@ if __name__ == '__main__':
     background = Background(game.screen)
     running = True
     enemy = None
+    actions = Actions()
     while game.running:
         game.set_tick(quantity=15)
         game.show_players_hp(str(player.player_hp))
@@ -22,7 +25,7 @@ if __name__ == '__main__':
         game.check_players_area(player.current_x)
         if game.players_area == 1:
             if game.enemy_counter <= 1:
-                game.generate_enemy(background.screen, player.current_x, random.randint(500, 1000), 590)
+                game.generate_enemy(background.screen, player.current_x, random.randint(800, 1000), 590)
             if player.current_x <= -1000 and game.dead_enemy_counter == 0:
                 if player.right_direction:
                     player.blocked = True
@@ -34,6 +37,9 @@ if __name__ == '__main__':
             if game.enemy_counter <= 3:
                 for _ in range(2):
                     game.generate_enemy(background.screen, player.current_x, random.randint(1700, 2000), 590)
+        elif game.players_area == 3:
+            if game.enemy_counter == 4:
+                game.generate_enemy(background.screen, player.current_x, 2900, 590)
         if player.dodge and not player.blocked:
             player.dodge_player(background.screen)
         if player.take_damage and not player.dead:
@@ -42,8 +48,6 @@ if __name__ == '__main__':
                 player.death(background.screen)
         if player.dead:
             player.death(background.screen)
-            enemy.attack = False
-            enemy.under_attack = False
         if not player.jump:
             if keys[pygame.K_UP] and not player.dodge:
                 player.jump = True
@@ -78,6 +82,10 @@ if __name__ == '__main__':
                 and not player.dodge:
             player.idle_player(background.screen)
         for enemy in game.enemies:
+            if player.dead:
+                enemy.run = False
+                enemy.attack = False
+                enemy.under_attack = False
             if enemy and not enemy.under_attack and not enemy.dead and not enemy.run and not enemy.attack:
                 enemy.idle_enemy(background.screen, player.current_x)
                 enemy.check_opponent(player.current_x, player.x_coordinate, player.current_y, player.y_coordinate)
@@ -86,10 +94,22 @@ if __name__ == '__main__':
                 if enemy.x_coordinate - (player.x_coordinate - player.current_x) <= 10 and not player.dodge:
                     player.take_damage = True
             if enemy and enemy.under_attack and not enemy.attack and not enemy.take_hit:
-                enemy.run = True
-                enemy.enemy_run(
-                    background.screen, player.current_x, player.x_coordinate, player.current_y, player.y_coordinate
-                )
+                if type(enemy) == Enemy:
+                    enemy.run = True
+                    enemy.enemy_run(
+                        background.screen, player.current_x, player.x_coordinate, player.current_y, player.y_coordinate
+                    )
+                elif type(enemy) == Knight:
+                    enemy.run = True
+                    if enemy.roll and enemy.run:
+                        enemy.enemy_roll(background.screen, player.current_x)
+                    elif enemy.run and not enemy.roll:
+                        enemy.enemy_run(
+                            background.screen, player.current_x, player.x_coordinate, player.current_y,
+                            player.y_coordinate
+                        )
+                        if actions.roll() % 5 == 0:
+                            enemy.roll = True
             if enemy.dead:
                 enemy.death(background.screen, player.current_x)
                 if enemy.death_animation_count == 1:
