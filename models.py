@@ -93,6 +93,59 @@ mushroom_fire_pack = [
     mushroom_fire6, mushroom_fire7
 ]
 
+"""Tentacles grow up."""
+tentacles_up0 = pygame.image.load("Images/Tentacles/tentacles_up0.png")
+tentacles_up1 = pygame.image.load("Images/Tentacles/tentacles_up1.png")
+tentacles_up2 = pygame.image.load("Images/Tentacles/tentacles_up2.png")
+tentacles_up3 = pygame.image.load("Images/Tentacles/tentacles_up3.png")
+tentacles_up4 = pygame.image.load("Images/Tentacles/tentacles_up4.png")
+
+tentacles_up_pack = [tentacles_up0, tentacles_up1, tentacles_up2, tentacles_up3, tentacles_up4]
+
+"""Mushroom use tentacles right."""
+mushroom_attack_tentacles_right0 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_right/mushroom_attack_tentacles_right0.png")
+mushroom_attack_tentacles_right1 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_right/mushroom_attack_tentacles_right1.png")
+mushroom_attack_tentacles_right2 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_right/mushroom_attack_tentacles_right2.png")
+mushroom_attack_tentacles_right3 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_right/mushroom_attack_tentacles_right3.png")
+mushroom_attack_tentacles_right4 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_right/mushroom_attack_tentacles_right4.png")
+
+mushroom_attack_tentacles_right_pack = [mushroom_attack_tentacles_right0, mushroom_attack_tentacles_right1,
+                                        mushroom_attack_tentacles_right2, mushroom_attack_tentacles_right3,
+                                        mushroom_attack_tentacles_right4]
+
+"""Mushroom use tentacles left."""
+mushroom_attack_tentacles_left0 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_left/mushroom_attack_tentacles_left0.png")
+mushroom_attack_tentacles_left1 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_left/mushroom_attack_tentacles_left1.png")
+mushroom_attack_tentacles_left2 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_left/mushroom_attack_tentacles_left2.png")
+mushroom_attack_tentacles_left3 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_left/mushroom_attack_tentacles_left3.png")
+mushroom_attack_tentacles_left4 =\
+    pygame.image.load("Images/Mushroom_attack_tentacles_left/mushroom_attack_tentacles_left4.png")
+
+mushroom_attack_tentacles_left_pack = [mushroom_attack_tentacles_left0, mushroom_attack_tentacles_left1,
+                                       mushroom_attack_tentacles_left2, mushroom_attack_tentacles_left3,
+                                       mushroom_attack_tentacles_left4]
+
+"""Dust explosion."""
+dust_explosion0 = pygame.image.load("Images/Dust_explosion/dust_explosion0.png")
+dust_explosion1 = pygame.image.load("Images/Dust_explosion/dust_explosion1.png")
+dust_explosion2 = pygame.image.load("Images/Dust_explosion/dust_explosion2.png")
+dust_explosion3 = pygame.image.load("Images/Dust_explosion/dust_explosion3.png")
+dust_explosion4 = pygame.image.load("Images/Dust_explosion/dust_explosion4.png")
+dust_explosion5 = pygame.image.load("Images/Dust_explosion/dust_explosion5.png")
+dust_explosion6 = pygame.image.load("Images/Dust_explosion/dust_explosion6.png")
+
+dust_explosion_pack = [dust_explosion0, dust_explosion1, dust_explosion2, dust_explosion3, dust_explosion4,
+                       dust_explosion5, dust_explosion6]
+
 """Mushroom death."""
 mushroom_death0 = pygame.image.load("Images/Mushoom_death/mushroom_death_0.png")
 mushroom_death1 = pygame.image.load("Images/Mushoom_death/mushroom_death_1.png")

@@ -4,6 +4,7 @@ import random
 from game import Game
 from player import Player
 from fireball import Fireball
+from tentacles import Tentacles
 from background import Background
 from enemy import Knight, Enemy
 from randomizer import Actions
@@ -12,6 +13,7 @@ if __name__ == '__main__':
     player = Player()
     game = Game()
     fireball = None
+    tentacles = Tentacles(player.x_coordinate)
     background = Background(game.screen)
     running = True
     enemy = None
@@ -49,16 +51,18 @@ if __name__ == '__main__':
         if player.dead:
             player.death(background.screen)
         if not player.jump:
-            if keys[pygame.K_UP] and not player.dodge:
+            if keys[pygame.K_UP] and not player.dodge and not player.tentacles_z:
                 player.jump = True
                 player.idle_player(background.screen)
         elif player.jump and not player.dead:
             player.jump_player(background.screen)
-        if keys[pygame.K_RIGHT] and not player.take_damage and not player.dead and not player.dodge and not player.blocked:
+        if keys[pygame.K_RIGHT] and not player.take_damage and not player.dead and not player.dodge\
+                and not player.blocked and not player.tentacles_z:
             player.move_player("right", background.screen)
-        elif keys[pygame.K_LEFT] and not player.take_damage and not player.dead and not player.dodge and player.current_x < 0:
+        elif keys[pygame.K_LEFT] and not player.take_damage and not player.dead and not player.dodge\
+                and player.current_x < 0 and not player.tentacles_z:
             player.move_player("left", background.screen)
-        elif keys[pygame.K_DOWN] and not player.take_damage and not player.dead:
+        elif keys[pygame.K_DOWN] and not player.take_damage and not player.dead and not player.tentacles_z:
             if player.current_x > -100 and not player.right_direction or\
                     (datetime.datetime.now() - player.dodge_last_use) <= player.dodge_cooldown:
                 player.idle_player(background.screen)
@@ -67,6 +71,21 @@ if __name__ == '__main__':
                 player.dodge_player(background.screen)
         else:
             player.move = False
+        if not player.tentacles_z:
+            if keys[pygame.K_z] and not player.dodge and not player.jump and not player.move:
+                if (datetime.datetime.now() - player.tentacles_z_last_use) >= player.tentacles_z_cooldown:
+                    player.tentacles_z = True
+                    tentacles.dust_explosion_z = True
+                    player.idle_player(background.screen)
+                else:
+                    player.idle_player(background.screen)
+        elif player.tentacles_z and not player.attack and\
+                not player.take_damage and not player.dead and not player.dodge and tentacles.dust_explosion_z:
+            player.use_tentacles(
+                background.screen, tentacles.tentacle_up_animation_count_z, tentacles.tentacle_down_animation_count_z
+            )
+            tentacles.dust_explosion(background.screen, player.right_direction)
+            tentacles.tentacles_up_z(background.screen, right_direction=player.right_direction, players_current_x=player.current_x)
         if not player.attack:
             if keys[pygame.K_SPACE] and not player.dodge:
                 player.attack = True
@@ -79,7 +98,7 @@ if __name__ == '__main__':
         if fireball and fireball.fireball_animation:
             fireball.fire(background.screen)
         if not player.move and not player.attack and not player.jump and not player.take_damage and not player.dead \
-                and not player.dodge:
+                and not player.dodge and not player.tentacles_z:
             player.idle_player(background.screen)
         for enemy in game.enemies:
             if player.dead:
@@ -115,6 +134,11 @@ if __name__ == '__main__':
                 if enemy.death_animation_count == 1:
                     game.dead_enemy_counter += 1
             if fireball and fireball.fireball_animation and fireball.check_hit(enemy):
+                if not enemy.dead:
+                    fireball = None
+                    enemy.under_attack = True
+                    enemy.take_hit = True
+            if player.tentacles_z and tentacles.check_hit(enemy):
                 if not enemy.dead:
                     fireball = None
                     enemy.under_attack = True
