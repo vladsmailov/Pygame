@@ -16,6 +16,11 @@ class Player:
     dodge = False
     blocked = False
     tentacles_z = False
+    tentacles_x = False
+    tentacles_c = False
+    tentacles_z_grow_up = False
+    tentacles_x_grow_up = False
+    tentacles_c_grow_up = False
     x_coordinate = 400
     y_coordinate = 690
     current_x = 0
@@ -29,15 +34,21 @@ class Player:
     dodge_up_animation_count = 4
     tentacle_up_animation_count_z = 0
     tentacle_down_animation_count_z = 4
-    tentacle_animation_count_x = 0
-    tentacle_animation_count_c = 0
+    tentacle_up_animation_count_x = 0
+    tentacle_down_animation_count_x = 4
+    tentacle_up_animation_count_c = 0
+    tentacle_down_animation_count_c = 4
     player_hp = 100
     dodge_cooldown = datetime.timedelta(seconds=2)
     dodge_last_use = datetime.datetime.now()
     dodge_underground_time = datetime.timedelta(seconds=2)
     dodge_underground_start_time = datetime.datetime.now()
-    tentacles_z_cooldown = datetime.timedelta(seconds=3)
+    tentacles_z_cooldown = datetime.timedelta(seconds=5)
     tentacles_z_last_use = datetime.datetime.now()
+    tentacles_x_cooldown = datetime.timedelta(seconds=5)
+    tentacles_x_last_use = datetime.datetime.now()
+    tentacles_c_cooldown = datetime.timedelta(seconds=5)
+    tentacles_c_last_use = datetime.datetime.now()
 
     def idle_player(self, background):
         if self.right_direction:
@@ -200,7 +211,7 @@ class Player:
     #         self.tentacles_z = False
     #         self.tentacles_z_last_use = datetime.datetime.now()
 
-    def use_tentacles(self, background, up_counter, down_counter):
+    def use_tentacles_z(self, background, up_counter, down_counter):
         if self.right_direction:
             direction = mushroom_attack_tentacles_right_pack
         else:
@@ -215,3 +226,36 @@ class Player:
             background.blit(direction[self.tentacle_down_animation_count_z], (388, 675))
             self.tentacles_z = False
             self.tentacles_z_last_use = datetime.datetime.now()
+
+    def use_tentacles_x(self, background, up_counter, down_counter):
+        if self.right_direction:
+            direction = mushroom_attack_tentacles_right_pack
+        else:
+            direction = mushroom_attack_tentacles_left_pack
+        if up_counter < 4:
+            background.blit(direction[self.tentacle_up_animation_count_x], (388, 675))
+        elif up_counter == 4 and down_counter == 4:
+            background.blit(direction[self.tentacle_up_animation_count_x], (388, 675))
+        elif 0 < down_counter < 4:
+            background.blit(direction[self.tentacle_down_animation_count_x], (388, 675))
+        else:
+            background.blit(direction[self.tentacle_down_animation_count_x], (388, 675))
+            self.tentacles_x = False
+            self.tentacles_x_last_use = datetime.datetime.now()
+
+    def use_tentacles_c(self, background, up_counter, down_counter):
+        if self.right_direction:
+            direction = mushroom_attack_tentacles_right_pack
+        else:
+            direction = mushroom_attack_tentacles_left_pack
+        if up_counter < 4:
+            background.blit(direction[self.tentacle_up_animation_count_c], (388, 675))
+        elif up_counter == 4 and down_counter == 4:
+            background.blit(direction[self.tentacle_up_animation_count_c], (388, 675))
+        elif 0 < down_counter < 4:
+            background.blit(direction[self.tentacle_down_animation_count_c], (388, 675))
+        else:
+            background.blit(direction[self.tentacle_down_animation_count_c], (388, 675))
+            self.tentacles_c = False
+            self.tentacles_c_last_use = datetime.datetime.now()
+

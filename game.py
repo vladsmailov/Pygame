@@ -46,9 +46,9 @@ class Game:
     def generate_enemy(self, background, player_current_x, enemies_x, enemies_y):
         self.enemy_counter += 1
         if self.players_area in CREEP_AREA:
-            enemy = Enemy(10, 0, enemies_x, enemies_y)
+            enemy = Enemy(50, 0, enemies_x, enemies_y)
         else:
-            enemy = Knight(1, 0, enemies_x, enemies_y)
+            enemy = Knight(100, 0, enemies_x, enemies_y)
         self.enemies.append(enemy)
         enemy.current_x = player_current_x
         enemy.idle_enemy(background, player_current_x)

@@ -51,18 +51,21 @@ if __name__ == '__main__':
         if player.dead:
             player.death(background.screen)
         if not player.jump:
-            if keys[pygame.K_UP] and not player.dodge and not player.tentacles_z:
+            if keys[pygame.K_UP] and not player.dodge and not player.tentacles_z and not player.tentacles_x\
+                    and not player.tentacles_c:
                 player.jump = True
                 player.idle_player(background.screen)
         elif player.jump and not player.dead:
             player.jump_player(background.screen)
         if keys[pygame.K_RIGHT] and not player.take_damage and not player.dead and not player.dodge\
-                and not player.blocked and not player.tentacles_z:
+                and not player.blocked and not player.tentacles_z and not player.tentacles_x and not player.tentacles_c:
             player.move_player("right", background.screen)
         elif keys[pygame.K_LEFT] and not player.take_damage and not player.dead and not player.dodge\
-                and player.current_x < 0 and not player.tentacles_z:
+                and player.current_x < 0 and not player.tentacles_z\
+                and not player.tentacles_x and not player.tentacles_c:
             player.move_player("left", background.screen)
-        elif keys[pygame.K_DOWN] and not player.take_damage and not player.dead and not player.tentacles_z:
+        elif keys[pygame.K_DOWN] and not player.take_damage and not player.dead and not player.tentacles_z\
+                and not player.tentacles_x and not player.tentacles_c:
             if player.current_x > -100 and not player.right_direction or\
                     (datetime.datetime.now() - player.dodge_last_use) <= player.dodge_cooldown:
                 player.idle_player(background.screen)
@@ -81,11 +84,44 @@ if __name__ == '__main__':
                     player.idle_player(background.screen)
         elif player.tentacles_z and not player.attack and\
                 not player.take_damage and not player.dead and not player.dodge and tentacles.dust_explosion_z:
-            player.use_tentacles(
+            player.use_tentacles_z(
                 background.screen, tentacles.tentacle_up_animation_count_z, tentacles.tentacle_down_animation_count_z
             )
-            tentacles.dust_explosion(background.screen, player.right_direction)
-            tentacles.tentacles_up_z(background.screen, right_direction=player.right_direction, players_current_x=player.current_x)
+            tentacles.dust_explosion_z_animation(background.screen, player.right_direction)
+            tentacles.tentacles_up_z(background.screen, right_direction=player.right_direction,
+                                     players_current_x=player.current_x)
+        if not player.tentacles_x:
+            if keys[pygame.K_x] and not player.dodge and not player.jump and not player.move:
+                if (datetime.datetime.now() - player.tentacles_x_last_use) >= player.tentacles_x_cooldown:
+                    player.tentacles_x = True
+                    tentacles.dust_explosion_x = True
+                    player.idle_player(background.screen)
+                else:
+                    player.idle_player(background.screen)
+        elif player.tentacles_x and not player.attack and\
+                not player.take_damage and not player.dead and not player.dodge and tentacles.dust_explosion_x:
+            player.use_tentacles_x(
+                background.screen, tentacles.tentacle_up_animation_count_x, tentacles.tentacle_down_animation_count_x
+            )
+            tentacles.dust_explosion_x_animation(background.screen, player.right_direction)
+            tentacles.tentacles_up_x(background.screen, right_direction=player.right_direction,
+                                     players_current_x=player.current_x)
+        if not player.tentacles_c:
+            if keys[pygame.K_c] and not player.dodge and not player.jump and not player.move:
+                if (datetime.datetime.now() - player.tentacles_c_last_use) >= player.tentacles_c_cooldown:
+                    player.tentacles_c = True
+                    tentacles.dust_explosion_c = True
+                    player.idle_player(background.screen)
+                else:
+                    player.idle_player(background.screen)
+        elif player.tentacles_c and not player.attack and\
+                not player.take_damage and not player.dead and not player.dodge and tentacles.dust_explosion_c:
+            player.use_tentacles_c(
+                background.screen, tentacles.tentacle_up_animation_count_c, tentacles.tentacle_down_animation_count_c
+            )
+            tentacles.dust_explosion_c_animation(background.screen, player.right_direction)
+            tentacles.tentacles_up_c(background.screen, right_direction=player.right_direction,
+                                     players_current_x=player.current_x)
         if not player.attack:
             if keys[pygame.K_SPACE] and not player.dodge:
                 player.attack = True
@@ -98,7 +134,7 @@ if __name__ == '__main__':
         if fireball and fireball.fireball_animation:
             fireball.fire(background.screen)
         if not player.move and not player.attack and not player.jump and not player.take_damage and not player.dead \
-                and not player.dodge and not player.tentacles_z:
+                and not player.dodge and not player.tentacles_z and not player.tentacles_x and not player.tentacles_c:
             player.idle_player(background.screen)
         for enemy in game.enemies:
             if player.dead:
@@ -138,9 +174,16 @@ if __name__ == '__main__':
                     fireball = None
                     enemy.under_attack = True
                     enemy.take_hit = True
-            if player.tentacles_z and tentacles.check_hit(enemy):
+            if player.tentacles_z and tentacles.check_hit(enemy, 'z'):
                 if not enemy.dead:
-                    fireball = None
+                    enemy.under_attack = True
+                    enemy.take_hit = True
+            if player.tentacles_x and tentacles.check_hit(enemy, 'x'):
+                if not enemy.dead:
+                    enemy.under_attack = True
+                    enemy.take_hit = True
+            if player.tentacles_c and tentacles.check_hit(enemy, 'c'):
+                if not enemy.dead:
                     enemy.under_attack = True
                     enemy.take_hit = True
             if enemy.under_attack and not enemy.dead and enemy.take_hit:
